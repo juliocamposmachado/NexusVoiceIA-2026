@@ -21,21 +21,3 @@ dist-ssr
 *.sln
 *.sw?
 .env
-
-# Ambientes virtuais Python
-.venv/
-venv/
-env/
-**/.venv/
-**/venv/
-
-# Cache e arquivos temporarios
-__pycache__/
-*.py[cod]
-.pytest_cache/
-.mypy_cache/
-
-# Segredos e configuracoes locais
-.env
-.env.*
-!.env.example
