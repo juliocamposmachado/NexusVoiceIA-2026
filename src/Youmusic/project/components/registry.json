@@ -1,0 +1,31 @@
+{
+  "version": "1.0.0",
+  "github_repository": "juliocamposmachado/nexus-terminal",
+  "github_branch": "main",
+  "components": {
+    "code_intelligence": {
+      "id": "code_intelligence",
+      "name": "Code Intelligence Engine",
+      "path": "components/code_intelligence.py",
+      "type": "analyzer",
+      "version": "1.0.0",
+      "description": "Diagnóstico de código Python em camadas: AST, Ruff, Pyright, Jedi",
+      "entrypoint": "CodeIntelligenceEngine",
+      "dependencies": [],
+      "compatibility": ">=8.0",
+      "origin": "github"
+    },
+    "figma_mcp": {
+      "id": "figma_mcp",
+      "name": "Figma MCP Integration",
+      "path": "components/figma_mcp.py",
+      "type": "integration",
+      "version": "1.0.0",
+      "description": "Integração com Figma MCP Server oficial — leitura de designs, assets, variáveis e escrita no canvas",
+      "entrypoint": "FigmaMCPClient",
+      "dependencies": ["figma-developer-mcp"],
+      "compatibility": ">=8.0",
+      "origin": "github"
+    }
+  }
+}

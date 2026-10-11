@@ -21,7 +21,46 @@ dist-ssr
 *.sln
 *.sw?
 .env
+<<<<<<< HEAD
 src/.venv/
 .venv/
 __pycache__/
 *.pyc
+=======
+
+# Ambientes virtuais Python
+.venv/
+venv/
+env/
+**/.venv/
+**/venv/
+
+# Cache e arquivos temporarios
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Segredos e configuracoes locais
+.env
+.env.*
+!.env.example
+>>>>>>> origin/main
+
+# Ambientes virtuais
+.venv/
+src/.venv/
+venv/
+
+# Cache Python
+__pycache__/
+*.py[cod]
+
+# Segredos e configurações locais
+.env
+.env.*
+!.env.example
+
+# Dependências e builds
+node_modules/
+dist/
