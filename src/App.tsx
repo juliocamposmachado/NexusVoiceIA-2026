@@ -8,7 +8,11 @@ import { TaskHistory } from "@/components/TaskHistory";
 import { CognitivePipeline } from "@/components/CognitivePipeline";
 import { TaskInput } from "@/components/TaskInput";
 import { BridgeControl } from "@/components/BridgeControl";
+<<<<<<< HEAD
 import type { ActionGroup } from "@/types";
+=======
+import type { ActionGroup, LogLevel } from "@/types";
+>>>>>>> origin/main
 
 function App() {
   const {

@@ -153,7 +153,11 @@ def is_within_workspace(path: Path) -> bool:
     """Verifica se um caminho está dentro do workspace autorizado."""
     try:
         resolved = path.resolve()
+<<<<<<< HEAD
         return resolved.is_relative_to(WORKSPACE)
+=======
+        return str(resolved).startswith(str(WORKSPACE))
+>>>>>>> origin/main
     except (OSError, ValueError):
         return False
 
@@ -190,6 +194,7 @@ def validate_request(payload: Dict[str, Any]) -> tuple[bool, str, str]:
 
     user_id = str(payload.get("user_id", "")).strip()
 
+<<<<<<< HEAD
     # Classifica a ação antes de decidir a autorização.
     action_hint = str(payload.get("action_hint", "auto")).upper().strip()
     if action_hint == "AUTO":
@@ -207,6 +212,12 @@ def validate_request(payload: Dict[str, Any]) -> tuple[bool, str, str]:
         if not authorized_users or not user_id or user_id not in authorized_users:
             logger.warning("Operação restrita negada: usuário ausente ou não autorizado.")
             return False, user_id, "Usuário não autorizado para esta operação."
+=======
+    # Verifica se o usuário está na lista de autorizados (se houver lista)
+    if authorized_users and user_id and user_id not in authorized_users:
+        logger.warning("Usuário não autorizado: %s...", user_id[:30])
+        return False, user_id, "Usuário não autorizado."
+>>>>>>> origin/main
 
     return True, user_id, ""
 
@@ -234,6 +245,7 @@ def execute_safe_command(command: str) -> Dict[str, Any]:
     NUNCA executa comandos recebidos diretamente do texto da solicitação.
     Apenas comandos da lista SAFE_COMMANDS ou derivados validados.
     """
+<<<<<<< HEAD
     # Aceita somente comandos estáticos definidos na allowlist do próprio código.
     allowed_commands = {
         item
@@ -246,6 +258,13 @@ def execute_safe_command(command: str) -> Dict[str, Any]:
     # O placeholder é substituído por um caminho citado para o shell.
     import shlex
     safe_cmd = command.replace("{workspace}", shlex.quote(str(WORKSPACE)))
+=======
+    if contains_forbidden(command):
+        return {"status": "error", "response": "Comando rejeitado por segurança."}
+
+    # Substitui placeholder do workspace
+    safe_cmd = command.replace("{workspace}", str(WORKSPACE))
+>>>>>>> origin/main
 
     try:
         result = subprocess.run(
@@ -358,6 +377,7 @@ def _infer_action(task_text: str) -> str:
 
 
 def _inspect_task(task_text: str) -> Dict[str, Any]:
+<<<<<<< HEAD
     """Inspeciona arquivos usando Python, sem passar caminhos ao shell."""
     words = task_text.split()
     candidates = [w.strip(".,;\\\"'") for w in words if "/" in w or "." in w]
@@ -409,6 +429,35 @@ def _inspect_task(task_text: str) -> Dict[str, Any]:
     except (OSError, PermissionError) as exc:
         logger.warning("Falha na inspeção: %s", type(exc).__name__)
         return {"status": "error", "response": "Não foi possível ler o caminho solicitado."}
+=======
+    """Executa inspeção de leitura baseada na tarefa (apenas caminhos do workspace)."""
+    # Tenta extrair um caminho da tarefa
+    words = task_text.split()
+    candidate_paths = [w for w in words if "/" in w or "." in w]
+
+    if not candidate_paths:
+        # Sem caminho específico — lista workspace
+        return execute_safe_command(f"ls -la {WORKSPACE}")
+
+    # Valida cada caminho candidato
+    for candidate in candidate_paths:
+        candidate = candidate.strip(".,;\"'")
+        path = Path(candidate)
+        if not path.is_absolute():
+            path = WORKSPACE / path
+        if not is_within_workspace(path):
+            continue
+        if path.exists():
+            if path.is_dir():
+                return execute_safe_command(f"ls -la {path}")
+            if path.is_file():
+                return execute_safe_command(f"head -50 {path}")
+
+    return {
+        "status": "ok",
+        "response": "Não encontrei o caminho solicitado dentro do workspace autorizado.",
+    }
+>>>>>>> origin/main
 
 
 # ──────────────────────────────────────────────────────────────────────────────

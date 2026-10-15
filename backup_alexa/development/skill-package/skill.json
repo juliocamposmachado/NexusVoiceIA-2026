@@ -1,0 +1,89 @@
+{
+  "manifest": {
+    "publishingInformation": {
+      "locales": {
+        "pt-BR": {
+          "summary": "Converse com o Nexus, seu assistente virtual de inteligência artificial, e descubra suas funcionalidades por meio da voz.",
+          "examplePhrases": [
+            "Alexa, open Nexus."
+          ],
+          "keywords": [
+            "Nexus",
+            "inteligência",
+            "artificial",
+            "assistente",
+            "virtual",
+            "produtividade",
+            "voz",
+            "automação"
+          ],
+          "name": "Nexus",
+          "description": "O Nexus é um assistente virtual desenvolvido para facilitar o acesso a informações e funcionalidades por meio de comandos de voz.\n\nCom esta Skill, você poderá iniciar uma conversa, conhecer os recursos disponíveis, solicitar ajuda e interagir com as funções implementadas do assistente em português brasileiro.\n\nO projeto busca integrar inteligência artificial, automação e recursos de produtividade em uma experiência simples e acessível.\n\nAs funcionalidades dependem da versão instalada e das integrações configuradas. O controle remoto do computador, a execução de comandos no terminal e o acesso a serviços externos não são garantidos por esta versão e somente estarão disponíveis quando forem implementados com autenticação, autorização e medidas de segurança adequadas.\n\nO Nexus não solicita que o usuário informe senhas ou credenciais privadas por voz.",
+          "smallIconUri": "file://assets/images/pt-BR_smallIconUri.png",
+          "updatesDescription": "Versão inicial da Skill Nexus, com suporte à interação por voz e respostas de ajuda.",
+          "largeIconUri": "file://assets/images/pt-BR_largeIconUri.png"
+        }
+      },
+      "automaticDistribution": {
+        "sourceLocaleForLanguages": [
+          {
+            "sourceLocale": "pt-BR",
+            "language": "pt"
+          }
+        ],
+        "isActive": true
+      },
+      "isAvailableWorldwide": false,
+      "testingInstructions": "{\"ask_dist_username\":\"\",\"ask_dist_password\":\"\",\"ask_dist_testing_instructions\":\"Sample Testing Instructions.\"}",
+      "category": "HOME_SERVICES",
+      "distributionMode": "PUBLIC",
+      "distributionCountries": [
+        "BR"
+      ]
+    },
+    "apis": {
+      "custom": {
+        "endpoint": {
+          "uri": "arn:aws:lambda:us-east-1:914179697674:function:369561e2-e521-4b92-9403-b517ebac1cc7:Release_1"
+        },
+        "interfaces": [],
+        "locales": {},
+        "regions": {
+          "EU": {
+            "endpoint": {
+              "uri": "arn:aws:lambda:eu-west-1:914179697674:function:369561e2-e521-4b92-9403-b517ebac1cc7:Release_1"
+            }
+          },
+          "NA": {
+            "endpoint": {
+              "uri": "arn:aws:lambda:us-east-1:914179697674:function:369561e2-e521-4b92-9403-b517ebac1cc7:Release_1"
+            }
+          },
+          "FE": {
+            "endpoint": {
+              "uri": "arn:aws:lambda:us-west-2:914179697674:function:369561e2-e521-4b92-9403-b517ebac1cc7:Release_1"
+            }
+          }
+        }
+      }
+    },
+    "manifestVersion": "1.0",
+    "privacyAndCompliance": {
+      "allowsPurchases": true,
+      "locales": {
+        "pt-BR": {
+          "termsOfUseUrl": "https://radiotatuapefm.wixsite.com/disparattechno/chatgpt",
+          "privacyPolicyUrl": "https://radiotatuapefm.wixsite.com/disparattechno/chatgpt"
+        }
+      },
+      "containsAds": false,
+      "isExportCompliant": true,
+      "isChildDirected": false,
+      "shoppingKit": {
+        "isShoppingActionsEnabled": false,
+        "isAmazonAssociatesOnAlexaEnabled": false
+      },
+      "usesPersonalInfo": false
+    }
+  }
+}

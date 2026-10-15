@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { Send, Loader2, Mic } from "lucide-react";
+<<<<<<< HEAD
 import type { ActionGroup } from "@/types";
+=======
+import type { ActionGroup, LogLevel, NexusTask, TaskStatus } from "@/types";
+>>>>>>> origin/main
 
 interface Props {
   onSubmit: (request: string, action: string, group: ActionGroup) => void;

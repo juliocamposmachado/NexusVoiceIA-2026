@@ -1,0 +1,100 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "nexus",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "name": "ExecutarTarefaIntent",
+          "slots": [
+            {
+              "name": "tarefa",
+              "type": "AMAZON.SearchQuery",
+              "samples": [
+                "verificar os arquivos do projeto",
+                "criar um arquivo python",
+                "rodar os testes",
+                "executar o diagnóstico",
+                "listar os arquivos",
+                "verificar o status do sistema"
+              ]
+            }
+          ],
+          "samples": [
+            "peça ao nexus {tarefa}",
+            "solicite ao nexus {tarefa}",
+            "diga ao nexus {tarefa}",
+            "nexus {tarefa}",
+            "peça para o nexus {tarefa}",
+            "solicite para o nexus {tarefa}",
+            "mande o nexus {tarefa}"
+          ]
+        },
+        {
+          "name": "StatusNexusIntent",
+          "slots": [],
+          "samples": [
+            "status do nexus",
+            "como está o nexus",
+            "verifique o status",
+            "o nexus está funcionando",
+            "estado do nexus",
+            "status do sistema"
+          ]
+        },
+        {
+          "name": "ListarArquivosIntent",
+          "slots": [],
+          "samples": [
+            "liste os arquivos",
+            "listar arquivos",
+            "quais arquivos existem",
+            "mostrar arquivos",
+            "ver arquivos do projeto",
+            "lista os arquivos do workspace"
+          ]
+        },
+        {
+          "name": "DiagnosticarIntent",
+          "slots": [],
+          "samples": [
+            "diagnosticar o ambiente",
+            "execute um diagnóstico",
+            "faça um diagnóstico",
+            "diagnostico do sistema",
+            "verificar o ambiente",
+            "diagnosticar o nexus"
+          ]
+        },
+        {
+          "name": "CancelarTarefaIntent",
+          "slots": [],
+          "samples": [
+            "cancelar tarefa",
+            "cancelar",
+            "parar tarefa",
+            "abortar tarefa",
+            "cancelar execução",
+            "parar execução"
+          ]
+        }
+      ],
+      "types": []
+    }
+  }
+}

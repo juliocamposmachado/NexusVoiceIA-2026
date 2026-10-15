@@ -611,11 +611,19 @@ class TestAlexaHandlers(unittest.TestCase):
             import lambda_function
         except ImportError:
             self.skipTest("ask_sdk_core não instalado — pulando teste de handler")
+<<<<<<< HEAD
 
         event = _make_launch_request()
         context = MagicMock()
         result = lambda_function.lambda_handler(event, context)
 
+=======
+        
+        event = _make_launch_request()
+        context = MagicMock()
+        result = lambda_function.lambda_handler(event, context)
+        
+>>>>>>> origin/main
         self.assertEqual(result["version"], "1.0")
         ssml = result["response"]["outputSpeech"]["ssml"]
         self.assertIn("Bem-vindo", ssml)
@@ -627,11 +635,19 @@ class TestAlexaHandlers(unittest.TestCase):
             import lambda_function
         except ImportError:
             self.skipTest("ask_sdk_core não instalado")
+<<<<<<< HEAD
 
         event = _make_intent_request("AMAZON.HelpIntent")
         context = MagicMock()
         result = lambda_function.lambda_handler(event, context)
 
+=======
+        
+        event = _make_intent_request("AMAZON.HelpIntent")
+        context = MagicMock()
+        result = lambda_function.lambda_handler(event, context)
+        
+>>>>>>> origin/main
         ssml = result["response"]["outputSpeech"]["ssml"]
         self.assertIn("NEXUS", ssml)
         self.assertFalse(result["response"]["shouldEndSession"])
@@ -642,11 +658,19 @@ class TestAlexaHandlers(unittest.TestCase):
             import lambda_function
         except ImportError:
             self.skipTest("ask_sdk_core não instalado")
+<<<<<<< HEAD
 
         event = _make_intent_request("AMAZON.CancelIntent")
         context = MagicMock()
         result = lambda_function.lambda_handler(event, context)
 
+=======
+        
+        event = _make_intent_request("AMAZON.CancelIntent")
+        context = MagicMock()
+        result = lambda_function.lambda_handler(event, context)
+        
+>>>>>>> origin/main
         self.assertTrue(result["response"]["shouldEndSession"])
         self.assertIn("Encerrando", result["response"]["outputSpeech"]["ssml"])
 
@@ -656,11 +680,19 @@ class TestAlexaHandlers(unittest.TestCase):
             import lambda_function
         except ImportError:
             self.skipTest("ask_sdk_core não instalado")
+<<<<<<< HEAD
 
         event = _make_intent_request("AMAZON.StopIntent")
         context = MagicMock()
         result = lambda_function.lambda_handler(event, context)
 
+=======
+        
+        event = _make_intent_request("AMAZON.StopIntent")
+        context = MagicMock()
+        result = lambda_function.lambda_handler(event, context)
+        
+>>>>>>> origin/main
         self.assertTrue(result["response"]["shouldEndSession"])
 
     def test_fallback_intent_returns_fallback_message(self):
@@ -669,11 +701,19 @@ class TestAlexaHandlers(unittest.TestCase):
             import lambda_function
         except ImportError:
             self.skipTest("ask_sdk_core não instalado")
+<<<<<<< HEAD
 
         event = _make_intent_request("AMAZON.FallbackIntent")
         context = MagicMock()
         result = lambda_function.lambda_handler(event, context)
 
+=======
+        
+        event = _make_intent_request("AMAZON.FallbackIntent")
+        context = MagicMock()
+        result = lambda_function.lambda_handler(event, context)
+        
+>>>>>>> origin/main
         ssml = result["response"]["outputSpeech"]["ssml"]
         self.assertIn("não entendi", ssml.lower())
         self.assertFalse(result["response"]["shouldEndSession"])
@@ -684,11 +724,19 @@ class TestAlexaHandlers(unittest.TestCase):
             import lambda_function
         except ImportError:
             self.skipTest("ask_sdk_core não instalado")
+<<<<<<< HEAD
 
         event = _make_session_ended_request()
         context = MagicMock()
         result = lambda_function.lambda_handler(event, context)
 
+=======
+        
+        event = _make_session_ended_request()
+        context = MagicMock()
+        result = lambda_function.lambda_handler(event, context)
+        
+>>>>>>> origin/main
         self.assertTrue(result["response"]["shouldEndSession"])
 
 
@@ -709,11 +757,19 @@ class TestCustomIntentsNexusDown(unittest.TestCase):
             import lambda_function
         except ImportError:
             self.skipTest("ask_sdk_core não instalado")
+<<<<<<< HEAD
 
         event = _make_intent_request("ExecutarTarefaIntent", {"tarefa": ""})
         context = MagicMock()
         result = lambda_function.lambda_handler(event, context)
 
+=======
+        
+        event = _make_intent_request("ExecutarTarefaIntent", {"tarefa": ""})
+        context = MagicMock()
+        result = lambda_function.lambda_handler(event, context)
+        
+>>>>>>> origin/main
         ssml = result["response"]["outputSpeech"]["ssml"]
         self.assertIn("não entendi", ssml.lower())
 
@@ -723,11 +779,19 @@ class TestCustomIntentsNexusDown(unittest.TestCase):
             import lambda_function
         except ImportError:
             self.skipTest("ask_sdk_core não instalado")
+<<<<<<< HEAD
 
         event = _make_intent_request("ExecutarTarefaIntent", {"tarefa": "listar arquivos"})
         context = MagicMock()
         result = lambda_function.lambda_handler(event, context)
 
+=======
+        
+        event = _make_intent_request("ExecutarTarefaIntent", {"tarefa": "listar arquivos"})
+        context = MagicMock()
+        result = lambda_function.lambda_handler(event, context)
+        
+>>>>>>> origin/main
         ssml = result["response"]["outputSpeech"]["ssml"]
         self.assertIn("conectar", ssml.lower())
 
@@ -737,11 +801,19 @@ class TestCustomIntentsNexusDown(unittest.TestCase):
             import lambda_function
         except ImportError:
             self.skipTest("ask_sdk_core não instalado")
+<<<<<<< HEAD
 
         event = _make_intent_request("StatusNexusIntent")
         context = MagicMock()
         result = lambda_function.lambda_handler(event, context)
 
+=======
+        
+        event = _make_intent_request("StatusNexusIntent")
+        context = MagicMock()
+        result = lambda_function.lambda_handler(event, context)
+        
+>>>>>>> origin/main
         ssml = result["response"]["outputSpeech"]["ssml"]
         self.assertIn("conectar", ssml.lower())
 
@@ -751,11 +823,19 @@ class TestCustomIntentsNexusDown(unittest.TestCase):
             import lambda_function
         except ImportError:
             self.skipTest("ask_sdk_core não instalado")
+<<<<<<< HEAD
 
         event = _make_intent_request("ListarArquivosIntent")
         context = MagicMock()
         result = lambda_function.lambda_handler(event, context)
 
+=======
+        
+        event = _make_intent_request("ListarArquivosIntent")
+        context = MagicMock()
+        result = lambda_function.lambda_handler(event, context)
+        
+>>>>>>> origin/main
         ssml = result["response"]["outputSpeech"]["ssml"]
         self.assertIn("conectar", ssml.lower())
 
@@ -765,11 +845,19 @@ class TestCustomIntentsNexusDown(unittest.TestCase):
             import lambda_function
         except ImportError:
             self.skipTest("ask_sdk_core não instalado")
+<<<<<<< HEAD
 
         event = _make_intent_request("DiagnosticarIntent")
         context = MagicMock()
         result = lambda_function.lambda_handler(event, context)
 
+=======
+        
+        event = _make_intent_request("DiagnosticarIntent")
+        context = MagicMock()
+        result = lambda_function.lambda_handler(event, context)
+        
+>>>>>>> origin/main
         ssml = result["response"]["outputSpeech"]["ssml"]
         self.assertIn("conectar", ssml.lower())
 

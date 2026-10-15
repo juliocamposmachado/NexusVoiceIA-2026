@@ -21,6 +21,12 @@ dist-ssr
 *.sln
 *.sw?
 .env
+<<<<<<< HEAD
+src/.venv/
+.venv/
+__pycache__/
+*.pyc
+=======
 
 # Ambientes virtuais Python
 .venv/
@@ -39,6 +45,7 @@ __pycache__/
 .env
 .env.*
 !.env.example
+<<<<<<< HEAD
 
 # Credenciais e artefatos locais
 *.pem
@@ -49,3 +56,24 @@ credentials
 *.zip
 *.zip.bak
 lambda_import_build/
+=======
+>>>>>>> origin/main
+
+# Ambientes virtuais
+.venv/
+src/.venv/
+venv/
+
+# Cache Python
+__pycache__/
+*.py[cod]
+
+# Segredos e configurações locais
+.env
+.env.*
+!.env.example
+
+# Dependências e builds
+node_modules/
+dist/
+>>>>>>> origin/main
