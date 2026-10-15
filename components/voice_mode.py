@@ -130,15 +130,35 @@ class VoiceSession:
         self._tts_lock = threading.Lock()
 
     @staticmethod
+    def missing_packages() -> list[str]:
+        packages = {
+            "SpeechRecognition": "speech_recognition",
+            "PyAudio": "pyaudio",
+        }
+        return [package for package, module in packages.items() if importlib.util.find_spec(module) is None]
+
+    @staticmethod
     def available() -> bool:
-        return importlib.util.find_spec("speech_recognition") is not None
+        return not VoiceSession.missing_packages()
+
+    @staticmethod
+    def validate_microphone() -> None:
+        if not VoiceSession.available():
+            missing = ", ".join(VoiceSession.missing_packages())
+            raise VoiceModeError(f"Dependências de voz ausentes: {missing}.")
+        try:
+            import speech_recognition as sr
+            with sr.Microphone():
+                pass
+        except Exception as exc:
+            raise VoiceModeError(
+                "Não foi possível acessar o microfone. Instale o suporte do sistema para o PyAudio "
+                "e confirme se um microfone está disponível. "
+                f"Detalhes: {exc}"
+            ) from exc
 
     def start(self) -> None:
-        if not self.available():
-            raise VoiceModeError(
-                "Reconhecimento de voz indisponível. Instale o pacote Python SpeechRecognition "
-                "e o suporte de áudio do sistema antes de usar /voice-on."
-            )
+        self.validate_microphone()
         if self._thread and self._thread.is_alive():
             return
         self.stop_event.clear()

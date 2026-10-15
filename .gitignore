@@ -39,3 +39,13 @@ __pycache__/
 .env
 .env.*
 !.env.example
+
+# Credenciais e artefatos locais
+*.pem
+*.key
+credentials
+.aws/
+.nexus/
+*.zip
+*.zip.bak
+lambda_import_build/

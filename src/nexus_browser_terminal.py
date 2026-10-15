@@ -6653,14 +6653,29 @@ class DirectChatBrowser(EdgeCopilotBrowser):
     """Browser bridge for direct user conversations without agent instructions."""
 
     CHATGPT_URL = "https://chatgpt.com/c/6ac733ca-6214-83e9-9392-470a72d70ea4"
+    CHATGPT_ROOT_URL = "https://chatgpt.com/"
 
-    def __init__(self, provider: str, browser_choice: str = "edge") -> None:
+    def __init__(
+        self,
+        provider: str,
+        browser_choice: str = "edge",
+        start_at_chatgpt_root: bool = False,
+    ) -> None:
         super().__init__(
             profile_dir=PROJECT_DIR / ".nexus" / f"{provider}-{browser_choice}",
             browser_choice=browser_choice,
         )
         self.provider = provider
-        self.copilot_url = self.CHATGPT_URL if provider == "chatgpt" else self.COPILOT_URL
+        if provider == "chatgpt":
+            self.copilot_url = self.CHATGPT_ROOT_URL if start_at_chatgpt_root else self.CHATGPT_URL
+        else:
+            self.copilot_url = self.COPILOT_URL
+
+    def ask(self, question: str) -> str:
+        answer = super().ask(question)
+        if self.provider == "chatgpt" and self.page.url.startswith(self.CHATGPT_ROOT_URL):
+            self.copilot_url = self.page.url
+        return answer
 
     def ensure_ready(self) -> None:
         super().ensure_ready()
@@ -8387,13 +8402,32 @@ try:
 except ImportError:
     VoiceModeError = Exception  # type: ignore[assignment,misc]
     VoiceSession = None  # type: ignore[assignment,misc]
+
+try:
+    from youtube_download_command import (
+        DEFAULT_OUTPUT as YOUTUBE_DOWNLOAD_OUTPUT,
+        YouTubeDownloadError,
+        command_exists as youtube_command_exists,
+        download_results as download_youtube_results,
+        ensure_yt_dlp as ensure_youtube_dlp,
+        format_result as format_youtube_result,
+        search_first_five as search_youtube_first_five,
+    )
+except ImportError:
+    YOUTUBE_DOWNLOAD_OUTPUT = Path.home() / "Music" / "YouTube"
+    YouTubeDownloadError = Exception  # type: ignore[assignment,misc]
+    youtube_command_exists = None  # type: ignore[assignment]
+    download_youtube_results = None  # type: ignore[assignment]
+    ensure_youtube_dlp = None  # type: ignore[assignment]
+    format_youtube_result = None  # type: ignore[assignment]
+    search_youtube_first_five = None  # type: ignore[assignment]
 # END NEXUS SECTION: AGENT_LOOP_INTEGRATION
 
 
 class NexusCompleter:
     COMMANDS = [
         "/nexus", "/nexus --auto", "/nexus --fast", "/nexus --auto --fast",
-        "/nexus stop", "/copilot", "/chatgpt", "/agir", "/agir --auto", "/imagem", "/voice-on", "/voice-off", "/status", "/quota", "/quota-reset", "/config", "/keys",
+        "/nexus stop", "/copilot", "/chatgpt", "/agir", "/agir --auto", "/imagem", "/voice-on", "/voice-off", "/audio-on", "/audio-off", "/baixar", "/status", "/quota", "/quota-reset", "/config", "/keys",
         "/reset-limits", "/setup", "/self-test", "/scripts", "/agente",
         "/evoluir", "/evoluir analisar", "/evoluir auto", "/evoluir status",
         "/evoluir history", "/evoluir roadmap", "/evoluir rollback", "/evoluir skill",
@@ -11207,6 +11241,9 @@ Subcomandos:
 /imagem <descrição>         gera imagem via ChatGPT e baixa para ~/Imagens-NEXUS
 /voice-on                   abre a bolha e ativa fala e reconhecimento de voz
 /voice-off                  encerra o modo de voz
+/audio-on                   alias de /voice-on
+/audio-off                  alias de /voice-off
+/baixar <pedido>             pesquisa e baixa os 5 primeiros resultados do YouTube
 /agir <tarefa>              agente ChatGPT em fases com aprovação sim/não/auto
 /agir --auto <tarefa>       execução automática sem confirmação por etapa
 /copilot <pergunta>         conversa direta com o Copilot (sem prompt de agente)
@@ -11324,9 +11361,57 @@ CONCLUSÃO
             print(f"[NEXUS] INSTALADO E PRONTO PARA USO — bibliotecas atualizadas; scripts rodando verificação de erro em andamento.")
             print(f"[NEXUS] Code Intelligence ativo: {active}")
 
+    def download_command(self, line: str) -> None:
+        """Search YouTube, confirm the first five results, and download them."""
+        query = line[len("/baixar"):].strip()
+        if not query:
+            query = input("O que deseja pesquisar no YouTube? ").strip()
+        if not query:
+            print("[NEXUS] Informe o que deseja baixar.")
+            return
+        if ensure_youtube_dlp is None:
+            print("\033[1;31m[NEXUS] Módulo de download do YouTube não encontrado.\033[0m")
+            return
+        print("[NEXUS] Verificando yt-dlp...")
+        installed, detail = ensure_youtube_dlp()
+        if not installed:
+            print(f"\033[1;31m[NEXUS] Não foi possível instalar o yt-dlp:\033[0m\n{detail}")
+            return
+        print(f"[NEXUS] yt-dlp pronto: {detail}")
+
+        print(f"\n[NEXUS] Pesquisando os 5 primeiros resultados para: {query}")
+        try:
+            results = search_youtube_first_five(query)
+        except YouTubeDownloadError as exc:
+            print(f"\033[1;31m[NEXUS] Pesquisa não concluída:\033[0m\n{exc}")
+            return
+
+        if not results:
+            print("[NEXUS] Nenhum resultado encontrado.")
+            return
+
+        print("\n================ RESULTADOS PARA DOWNLOAD ================")
+        for index, result in enumerate(results, start=1):
+            print(format_youtube_result(index, result))
+        print(f"Destino: {YOUTUBE_DOWNLOAD_OUTPUT}")
+        print("===========================================================")
+
+        answer = input("Deseja baixar estes resultados? [s/N]: ").strip().casefold()
+        if answer not in {"s", "sim", "y", "yes"}:
+            print("[NEXUS] Download cancelado. Nenhum arquivo foi baixado.")
+            return
+
+        print(f"\n[NEXUS] Iniciando download de {len(results)} resultado(s)...")
+        try:
+            download_youtube_results(results, YOUTUBE_DOWNLOAD_OUTPUT)
+        except YouTubeDownloadError as exc:
+            print(f"\033[1;31m[NEXUS] Download não concluído:\033[0m\n{exc}")
+            return
+        print(f"\033[1;32m[NEXUS] Downloads concluídos em {YOUTUBE_DOWNLOAD_OUTPUT}.\033[0m")
+
     def voice_command(self, line: str) -> None:
         """Ativa ou desativa a escuta contínua com resposta falada."""
-        if line.strip() == "/voice-off":
+        if line.strip() in {"/voice-off", "/audio-off"}:
             if self.voice_session is not None:
                 self.voice_session.stop()
                 self.voice_session = None
@@ -11342,18 +11427,30 @@ CONCLUSÃO
             if voice_thread is not None and not voice_thread.is_alive():
                 self.voice_session = None
             else:
-                print("[NEXUS] O modo de voz já está ativo. Use /voice-off para encerrar.")
+                print("[NEXUS] O modo de voz já está ativo. Use /voice-off ou /audio-off para encerrar.")
                 return
 
-        if not VoiceSession.available():
-            print("[NEXUS] Preparando reconhecimento de voz...")
-            installed, detail = bootstrap_python_package("SpeechRecognition")
+        missing_packages = VoiceSession.missing_packages()
+        for package in missing_packages:
+            print(f"[NEXUS] Preparando dependência de voz: {package}...")
+            installed, detail = bootstrap_python_package(package)
             if not installed:
-                print(f"\033[1;31m[NEXUS] Não foi possível instalar o reconhecimento de voz: {detail}\033[0m")
+                print(
+                    f"\033[1;31m[NEXUS] Não foi possível instalar {package}: {detail}\033[0m"
+                )
                 return
-            if not VoiceSession.available():
-                print("\033[1;31m[NEXUS] O reconhecimento de voz não ficou disponível.\033[0m")
-                return
+
+        missing_packages = VoiceSession.missing_packages()
+        if missing_packages:
+            missing = ", ".join(missing_packages)
+            print(f"\033[1;31m[NEXUS] Dependências de voz indisponíveis: {missing}.\033[0m")
+            return
+
+        try:
+            VoiceSession.validate_microphone()
+        except VoiceModeError as exc:
+            print(f"\033[1;31m[NEXUS] Microfone indisponível: {exc}\033[0m")
+            return
 
         print("Escolha o navegador para conversar com o ChatGPT: [1] Chrome  [2] Edge")
         browser_choice = input("> ").strip().lower()
@@ -11389,7 +11486,7 @@ CONCLUSÃO
 
         print("\n\033[1;32m[NEXUS] Modo de voz ATIVO.\033[0m")
         print("  Fale normalmente; a resposta será lida em voz alta.")
-        print("  Diga 'parar' ou use /voice-off para encerrar.")
+        print("  Diga 'parar' ou use /voice-off ou /audio-off para encerrar.")
 
     def generate_image_command(self, line: str) -> None:
         """Generate an image via ChatGPT and download it locally."""
@@ -11479,9 +11576,15 @@ CONCLUSÃO
         print(f"Cérebro: ChatGPT via DirectChatBrowser ({browser_choice})")
         print(f"Modo: {'AUTO' if auto_requested else 'MANUAL (sim/não/auto)'}")
         print(f"Fases: ANÁLISE → PLANEJAMENTO → GERAÇÃO → APROVAÇÃO → EXECUÇÃO → VALIDAÇÃO → CONCLUSÃO")
+        if auto_requested:
+            print("URL inicial: https://chatgpt.com/ — a conversa criada será usada nas próximas etapas.")
         print(f"\n{'=' * 60}\n")
 
-        browser = DirectChatBrowser("chatgpt", browser_choice)
+        browser = DirectChatBrowser(
+            "chatgpt",
+            browser_choice,
+            start_at_chatgpt_root=auto_requested,
+        )
         try:
             browser.start()
             browser.ensure_ready()
@@ -11569,8 +11672,11 @@ CONCLUSÃO
         if line == "/imagem" or line.startswith("/imagem "):
             self.generate_image_command(line)
             return
-        if line in {"/voice-on", "/voice-off"}:
+        if line in {"/voice-on", "/voice-off", "/audio-on", "/audio-off"}:
             self.voice_command(line)
+            return
+        if line == "/baixar" or line.startswith("/baixar "):
+            self.download_command(line)
             return
         if line == "/quota":
             self.quota_status()
@@ -11693,6 +11799,14 @@ Diagnóstico local: /intel [ARQUIVO.py]
         setup_readline(self)
         self.banner()
         self.startup_code_intelligence()
+
+        if ensure_youtube_dlp is not None:
+            print("\n[NEXUS] Verificando yt-dlp para o comando /baixar...")
+            installed, detail = ensure_youtube_dlp()
+            if installed:
+                print(f"[NEXUS] yt-dlp pronto: {detail}")
+            else:
+                print(f"\033[1;33m[NEXUS] yt-dlp pendente: {detail}\033[0m")
 
         keys = get_api_keys(self.config)
         if not keys:

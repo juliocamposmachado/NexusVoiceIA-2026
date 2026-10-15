@@ -1,0 +1,68 @@
+{
+  "manifest": {
+    "publishingInformation": {
+      "locales": {
+        "pt-BR": {
+          "summary": "Controle o NEXUS por voz através da Alexa",
+          "examplePhrases": [
+            "Alexa, peça ao nexus verificar o status",
+            "Alexa, peça ao nexus listar os arquivos",
+            "Alexa, peça ao nexus diagnosticar o ambiente"
+          ],
+          "name": "NEXUS",
+          "description": "Skill da Alexa para interagir com o NEXUS por voz em português brasileiro. Permite solicitar tarefas, consultar status, listar arquivos e diagnosticar o ambiente.",
+          "smallIconUri": "",
+          "largeIconUri": "",
+          "keywords": [
+            "nexus",
+            "terminal",
+            "desenvolvimento",
+            "automação"
+          ],
+          "updatesDescription": "Versão inicial da Skill NEXUS"
+        }
+      },
+      "isAvailableWorldwide": false,
+      "category": "TOOLS_AND_UTILITIES",
+      "distributionCountries": ["BR", "PT", "US"]
+    },
+    "apis": {
+      "custom": {
+        "endpoint": {
+          "uri": "",
+          "endpointType": "AWS_LAMBDA_FUNCTION"
+        },
+        "interfaces": [],
+        "regions": {
+          "default": {
+            "endpoint": {
+              "uri": "",
+              "endpointType": "AWS_LAMBDA_FUNCTION"
+            }
+          }
+        }
+      }
+    },
+    "manifestVersion": "1.0",
+    "permissions": [],
+    "privacyAndCompliance": {
+      "allowsPurchases": false,
+      "usesPersonalInfo": false,
+      "isChildDirected": false,
+      "isExportCompliant": true,
+      "containsAds": false,
+      "locales": {
+        "pt-BR": {
+          "privacyPolicyUrl": "",
+          "termsOfUseUrl": ""
+        }
+      }
+    },
+    "events": [],
+    "targeting": {
+      "audience": {
+        "type": "ADULT"
+      }
+    }
+  }
+}
